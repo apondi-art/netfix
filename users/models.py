@@ -13,8 +13,6 @@ class Customer(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     birth = models.DateField()
 
-    def __str__(self):
-        return self.user.username
 
 class Company(models.Model):
     user = models.OneToOneField(
