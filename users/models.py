@@ -10,7 +10,8 @@ class User(AbstractUser):
 
 
 class Customer(models.Model):
-    pass
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    birth = models.DateField()
 
 
 class Company(models.Model):
