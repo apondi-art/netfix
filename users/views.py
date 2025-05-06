@@ -1,14 +1,16 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth import login, authenticate
 from django.views.generic import CreateView, TemplateView
-
+from django.db import transaction
+from django.contrib import messages
 from .forms import CustomerSignUpForm, CompanySignUpForm, UserLoginForm
 from .models import User, Company, Customer
 
 
+
+
 def register(request):
     return render(request, 'users/register.html')
-
 
 class CustomerSignUpView(CreateView):
     model = User
@@ -24,37 +26,45 @@ class CustomerSignUpView(CreateView):
         login(self.request, user)
         return redirect('/')
 
-
 class CompanySignUpView(CreateView):
     model = User
     form_class = CompanySignUpForm
     template_name = 'users/register_company.html'
+    success_url = '/'
 
     def get_context_data(self, **kwargs):
         kwargs['user_type'] = 'company'
         return super().get_context_data(**kwargs)
 
     def form_valid(self, form):
-        user = form.save()
-        login(self.request, user)
-        return redirect('/')
-
-
-
+        try:
+                user = form.save()
+                login(self.request, user)
+                messages.success(
+                    self.request,
+                    f'Account created successfully for {user.email}'
+                )
+                return redirect(self.get_success_url())
+                
+        except Exception as e:
+            messages.error(
+                self.request,
+                f'Registration failed: {str(e)}'
+            )
+            return self.form_invalid(form)
 
 def LoginUserView(request):
     if request.method == 'POST':
         form = UserLoginForm(request.POST)
         if form.is_valid():
-            username_or_email = form.cleaned_data['username']
+            email = form.cleaned_data['email']
             password = form.cleaned_data['password']
             
-         
-            user = authenticate(request, username=username_or_email, password=password)
+            user = authenticate(request, email=email, password=password)
             
             if user is not None:
                 login(request, user)
-                return redirect('/')  
+                return redirect('/')
             else:
                 form.add_error(None, 'Invalid credentials')
     else:
