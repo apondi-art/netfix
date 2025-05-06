@@ -6,6 +6,7 @@ from . import views as v
 
 urlpatterns = [
     path('', v.register, name='register'),
+    path('login/', v.LoginUserView,name='login'),
     path('company/', v.CompanySignUpView.as_view(), name='register_company'),
     path('customer/', v.CustomerSignUpView.as_view(), name='register_customer'),
 ]

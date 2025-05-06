@@ -46,18 +46,21 @@ def LoginUserView(request):
     if request.method == 'POST':
         form = UserLoginForm(request.POST)
         if form.is_valid():
-            username_or_email = form.cleaned_data['username']
+            email = form.cleaned_data['email']
             password = form.cleaned_data['password']
-            
-         
-            user = authenticate(request, username=username_or_email, password=password)
-            
+
+            try:
+                user_obj = User.objects.get(email=email)
+                user = authenticate(request, username=user_obj.username, password=password)
+            except User.DoesNotExist:
+                user = None
+
             if user is not None:
                 login(request, user)
-                return redirect('/')  
+                return redirect('/')
             else:
-                form.add_error(None, 'Invalid credentials')
+                form.add_error(None, 'Invalid email or password')
     else:
         form = UserLoginForm()
-        
+
     return render(request, 'users/login.html', {'form': form})

@@ -119,12 +119,7 @@ button:hover {
   list-style-type: none;
 }
 .navbar ul li:not(:last-child) {
-  margin-right: 40px;er.png" alt="customer">
-  </a>
-</div>
-<p>Customer</p>
-</div>
-</div>
+  margin-right: 40px;
 }
 .navbar ul li {
   border: 2px solid transparent;
