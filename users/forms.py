@@ -23,48 +23,83 @@ class CustomerSignUpForm(UserCreationForm):
 
 
 class CompanySignUpForm(UserCreationForm):
-    email = forms.EmailField(required=True)
-    field = forms.ChoiceField(choices=Company.field.field.choices)
+    email = forms.EmailField(
+        required=True,
+        widget=forms.EmailInput(attrs={
+            'placeholder': 'business@example.com',
+            'class': 'form-control',
+            'autocomplete': 'email'
+        }),
+        help_text="Required. Enter a valid business email address.",
+        error_messages={
+            'required': 'You must provide an email address',
+            'invalid': 'Please enter a valid email address'
+        }
+    )
+    
+    field = forms.ChoiceField(
+        choices=Company.FIELD_CHOICES,
+        widget=forms.Select(attrs={
+            'class': 'form-control'
+        }),
+        help_text="Select your primary service field",
+        required=True
+    )
 
     class Meta(UserCreationForm.Meta):
         model = User
         fields = ('username', 'email', 'password1', 'password2', 'field')
-def __init__(self, *args, **kwargs):
+
+    def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        # Add placeholders and classes to all fields
-        self.fields['username'].widget.attrs.update({
-            'placeholder': 'Choose a username',
-            'class': 'form-control'
-        })
-        self.fields['password1'].widget.attrs.update({
-            'placeholder': 'Enter password',
-            'class': 'form-control'
-        })
-        self.fields['password2'].widget.attrs.update({
-            'placeholder': 'Confirm password',
-            'class': 'form-control'
-        })
-        self.fields['email'].widget.attrs.update({
-            'placeholder': 'Enter your email address',
-            'class': 'form-control'
-        })
-@transaction.atomic
-def save(self):
+        
+        # Set common attributes for all fields
+        field_attrs = {
+            'class': 'form-control',
+            'autocomplete': 'off'
+        }
+        
+        for field_name, field in self.fields.items():
+            field.widget.attrs.update(field_attrs)
+            if field_name == 'username':
+                field.widget.attrs['placeholder'] = 'Choose a username'
+                field.help_text = 'Required. 150 characters or fewer. Letters, digits and @/./+/-/_ only.'
+            elif field_name == 'password1':
+                field.widget.attrs['placeholder'] = 'Create a password'
+            elif field_name == 'password2':
+                field.widget.attrs['placeholder'] = 'Confirm password'
+
+    def clean_email(self):
+        email = self.cleaned_data.get('email').lower().strip()
+        if User.objects.filter(email=email).exists():
+            raise ValidationError("This email is already registered.")
+        return email
+
+    @transaction.atomic
+    def save(self, commit=True):
         user = super().save(commit=False)
-        user.email = self.cleaned_data.get('email')
+        # Ensure all required fields are set
+        user.email = self.cleaned_data['email']
         user.is_company = True
-        user.save()
-        company = Company.objects.create(
-            user=user,
-            field=self.cleaned_data.get('field')
-        )
-        return user, company
+        user.username = self.cleaned_data['username'] 
+        
+        if commit:
+            
+                user.save()  # This saves username, email, and hashed password
+                
+             
+                
+                # Create company profile
+                company = Company(
+                    user=user,
+                    field=self.cleaned_data['field']
+                 
+                )
+                company.save()
 
-
-
+                return user
+          
     
-
-
 class UserLoginForm(forms.Form):
     def __init__(self, *args, **kwargs):
         super(UserLoginForm, self).__init__(*args, **kwargs)
