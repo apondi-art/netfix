@@ -3,11 +3,16 @@ from django.contrib.auth.models import AbstractUser
 from django.core.validators import MaxValueValidator, MinValueValidator
 
 
+
 class User(AbstractUser):
     is_company = models.BooleanField(default=False)
     is_customer = models.BooleanField(default=False)
-    email = models.CharField(max_length=100, unique=True)
+    email = models.EmailField(unique=True)
+    # USERNAME_FIELD = 'email'
+    # REQUIRED_FIELDS = ['username']
 
+    class Meta:
+        db_table = 'users_user'
 
 class Customer(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
@@ -15,26 +20,39 @@ class Customer(models.Model):
 
 
 class Company(models.Model):
+
+    FIELD_CHOICES = [
+        ('Air Conditioner', 'Air Conditioner'),
+        ('All in One', 'All in One'),
+        ('Carpentry', 'Carpentry'),
+        ('Electricity', 'Electricity'),
+        ('Gardening', 'Gardening'),
+        ('Home Machines', 'Home Machines'),
+        ('House Keeping', 'House Keeping'),
+        ('Interior Design', 'Interior Design'),
+        ('Locks', 'Locks'),
+        ('Painting', 'Painting'),
+        ('Plumbing', 'Plumbing'),
+        ('Water Heaters', 'Water Heaters')
+    ]
     user = models.OneToOneField(
-        User, on_delete=models.CASCADE, primary_key=True)
-    field = models.CharField(max_length=70, choices=(('Air Conditioner', 'Air Conditioner'),
-                                                     ('All in One', 'All in One'),
-                                                     ('Carpentry', 'Carpentry'),
-                                                     ('Electricity',
-                                                      'Electricity'),
-                                                     ('Gardening', 'Gardening'),
-                                                     ('Home Machines',
-                                                      'Home Machines'),
-                                                     ('House Keeping',
-                                                      'House Keeping'),
-                                                     ('Interior Design',
-                                                      'Interior Design'),
-                                                     ('Locks', 'Locks'),
-                                                     ('Painting', 'Painting'),
-                                                     ('Plumbing', 'Plumbing'),
-                                                     ('Water Heaters', 'Water Heaters')), blank=False, null=False)
+        User, 
+        on_delete=models.CASCADE,
+          primary_key=True,
+          related_name= 'company'
+          )
+    field = models.CharField(
+         max_length=70, 
+         choices=  FIELD_CHOICES,
+         blank= False,
+         null = False,
+    )
     rating = models.IntegerField(
-        validators=[MaxValueValidator(5), MinValueValidator(0)], default=0)
+        validators=[MaxValueValidator(5), MinValueValidator(0)], 
+        default=0
+        )
+    class Meta:
+        db_table = 'users_company'
 
     def __str__(self):
-        return str(self.user.id) + ' - ' + self.user.username
+         return f"{self.user.username} ({self.field})"
