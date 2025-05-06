@@ -40,7 +40,7 @@ class CompanySignUpForm(UserCreationForm):
             user=user,
             field=self.cleaned_data.get('field')
         )
-        return user
+        return user, company
 
 
 
