@@ -29,9 +29,27 @@ class CompanySignUpForm(UserCreationForm):
     class Meta(UserCreationForm.Meta):
         model = User
         fields = ('username', 'email', 'password1', 'password2', 'field')
-
-    @transaction.atomic
-    def save(self):
+def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        # Add placeholders and classes to all fields
+        self.fields['username'].widget.attrs.update({
+            'placeholder': 'Choose a username',
+            'class': 'form-control'
+        })
+        self.fields['password1'].widget.attrs.update({
+            'placeholder': 'Enter password',
+            'class': 'form-control'
+        })
+        self.fields['password2'].widget.attrs.update({
+            'placeholder': 'Confirm password',
+            'class': 'form-control'
+        })
+        self.fields['email'].widget.attrs.update({
+            'placeholder': 'Enter your email address',
+            'class': 'form-control'
+        })
+@transaction.atomic
+def save(self):
         user = super().save(commit=False)
         user.email = self.cleaned_data.get('email')
         user.is_company = True
