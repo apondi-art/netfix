@@ -1,13 +1,63 @@
-{% extends 'main/base.html' %} 
-{% block title %}
-  Company Registration
-{%endblock %}
+{% extends 'main/base.html' %}
+{% block title %}Company Registration{% endblock %}
 
 {% block content %}
-    <form method="POST">
+<div class="content">
+    <h1 class="title">Company Registration</h1>
+    
+    <form method="POST" novalidate>
         {% csrf_token %}
-        {{form}}
-        <span class="helptext">Choose Field Above</span>
-        <button type="submit" name="register">Register</button>
+        
+        {% if form.errors %}
+            <div class="error_message">
+                {% for field, errors in form.errors.items %}
+                    {% for error in errors %}
+                        <p>{{ field|title }}: {{ error }}</p>
+                    {% endfor %}
+                {% endfor %}
+            </div>
+        {% endif %}
+        
+        <div class="choice" style="flex-direction: column; gap: 20px;">
+            <div>
+                <span>{{ form.username.label_tag }}</span>
+                {{ form.username }}
+                {% if form.username.help_text %}
+                    <small class="form-text text-muted">{{ form.username.help_text }}</small>
+                {% endif %}
+            </div>
+            
+            <div>
+                <span>{{ form.email.label_tag }}</span>
+                {{ form.email }}
+                {% if form.email.help_text %}
+                    <small class="form-text text-muted">{{ form.email.help_text }}</small>
+                {% endif %}
+            </div>
+            
+            <div>
+                <span>{{ form.password1.label_tag }}</span>
+                {{ form.password1 }}
+            </div>
+            
+            <div>
+                <span>{{ form.password2.label_tag }}</span>
+                {{ form.password2 }}
+            </div>
+            
+            <div>
+                <span>{{ form.field.label_tag }}</span>
+                {{ form.field }}
+                {% if form.field.help_text %}
+                    <small class="form-text text-muted">{{ form.field.help_text }}</small>
+                {% endif %}
+            </div>
+        </div>
+        
+        <button type="submit" class="like_button" style="margin-top: 30px;">
+            Register Company
+        </button>
     </form>
+</div>
 {% endblock %}
+
