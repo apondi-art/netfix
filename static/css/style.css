@@ -308,9 +308,10 @@ form {
   width: 65%;
 }
 
-/* form ul {
-  display: none;
-} */
+input::placeholder, textarea::placeholder {
+  color: black;
+}
+
 
 form input {
   padding: 10px 3px;
