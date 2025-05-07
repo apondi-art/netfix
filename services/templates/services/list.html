@@ -1,18 +1,32 @@
 {% extends 'main/base.html' %}
-{% block title %}
-    Services List
-{% endblock %}
+
+{% block title %}Services List{% endblock %}
+
 {% block content %}
     <p class="title">Services</p>
-    {% if user.is_company %}
-        <a class="create_service" href="/services/create"> Create Service</a>
+    
+    <!-- Only company users can see the Create Service link -->
+    {% if user.is_authenticated and user.is_company %}
+        <a class="create_service" href="{% url 'services_create' %}"> Create Service</a>
     {% endif %}
+    
     <div class='services_list'>
         {% if services %}
-            {% for service in services.all %}
+            {% for service in services %}
+                <div class="service-card">
+                    <h3>{{ service.name }}</h3>
+                    <p class="field-tag">{{ service.field }}</p>
+                    <p class="price">{{ service.price_hour }} per hour</p>
+                    <p class="company">By: {{ service.company }}</p>
+                    <div class="rating">
+                        Rating: {{ service.rating }}/5
+                    </div>
+                    <p class="description-preview">{{ service.description|truncatechars:100 }}</p>
+                    <a href="{% url 'index' service.id %}" class="view-details">View Details</a>
+                </div>
             {% endfor %}
         {% else %}
             <h2>Sorry No services available yet</h2>
         {% endif %}
-     </div>
+    </div>
 {% endblock %}
