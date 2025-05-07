@@ -27,12 +27,13 @@ class CompanySignUpView(CreateView):
     model = User
     form_class = CompanySignUpForm
     template_name = 'users/register_company.html'
-    success_url = '/'
+
+    
 
     def get_context_data(self, **kwargs):
         kwargs['user_type'] = 'company'
         return super().get_context_data(**kwargs)
-
+    
     def form_valid(self, form):
         try:
                 user = form.save()
@@ -41,7 +42,7 @@ class CompanySignUpView(CreateView):
                     self.request,
                     f'Account created successfully for {user.email}'
                 )
-                return redirect(self.get_success_url())
+                return redirect('/')
                 
         except Exception as e:
             messages.error(
@@ -54,16 +55,17 @@ def LoginUserView(request):
     if request.method == 'POST':
         form = UserLoginForm(request.POST)
         if form.is_valid():
-            email = form.cleaned_data['email']
+            # email = form.cleaned_data['email']
             email = form.cleaned_data['email']
             password = form.cleaned_data['password']
-            
+
             user = authenticate(request, email=email, password=password)
             
             if user is not None:
                 login(request, user)
                 return redirect('/')
             else:
+               
                 form.add_error(None, 'Invalid email or password')
     else:
         form = UserLoginForm()
