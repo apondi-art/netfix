@@ -46,7 +46,9 @@ class Company(models.Model):
          choices=  FIELD_CHOICES,
          blank= False,
          null = False,
+         default='All in One'
     )
+    is_all_in_one = models.BooleanField(default=False)
     rating = models.IntegerField(
         validators=[MaxValueValidator(5), MinValueValidator(0)], 
         default=0
@@ -55,4 +57,9 @@ class Company(models.Model):
         db_table = 'users_company'
 
     def __str__(self):
-         return f"{self.user.username} ({self.field})"
+          if self.is_all_in_one  or self.field == 'All in One':
+            return f"{self.user.username} (All in One)"
+          return f"{self.user.username} ({self.field})"
+
+
+   
