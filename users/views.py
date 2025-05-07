@@ -6,9 +6,6 @@ from django.contrib import messages
 from .forms import CustomerSignUpForm, CompanySignUpForm, UserLoginForm
 from .models import User, Company, Customer
 
-
-
-
 def register(request):
     return render(request, 'users/register.html')
 
