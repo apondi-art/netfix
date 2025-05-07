@@ -16,8 +16,6 @@ def validate_email(value):
         raise ValidationError(
             value + " is already taken.")
 
-
-
 class CompanySignUpForm(UserCreationForm):
     email = forms.EmailField(
         required=True,
