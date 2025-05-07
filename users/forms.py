@@ -17,10 +17,6 @@ def validate_email(value):
             value + " is already taken.")
 
 
-class CustomerSignUpForm(UserCreationForm):
-    pass
-
-
 
 class CompanySignUpForm(UserCreationForm):
     email = forms.EmailField(

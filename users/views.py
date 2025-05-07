@@ -58,6 +58,7 @@ def LoginUserView(request):
         form = UserLoginForm(request.POST)
         if form.is_valid():
             email = form.cleaned_data['email']
+            email = form.cleaned_data['email']
             password = form.cleaned_data['password']
             
             user = authenticate(request, email=email, password=password)
@@ -66,8 +67,8 @@ def LoginUserView(request):
                 login(request, user)
                 return redirect('/')
             else:
-                form.add_error(None, 'Invalid credentials')
+                form.add_error(None, 'Invalid email or password')
     else:
         form = UserLoginForm()
-        
+
     return render(request, 'users/login.html', {'form': form})
