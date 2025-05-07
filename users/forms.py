@@ -15,6 +15,21 @@ def validate_email(value):
     if User.objects.filter(email=value).exists():
         raise ValidationError(
             value + " is already taken.")
+    
+class CustomerSignUpForm(UserCreationForm):
+    birth = forms.DateField(
+        widget=forms.DateInput(attrs={'type': 'date', 'placeholder': 'Enter your date of birth'}),
+        label="Date of Birth"
+    )
+
+    class Meta(UserCreationForm.Meta):
+        model = User
+        fields = ('email', 'password1', 'password2', 'birth')
+        labels = {
+            'email': 'Email Address',
+            'password1': 'Password',
+            'password2': 'Confirm Password',
+        }    
 
 class CompanySignUpForm(UserCreationForm):
     email = forms.EmailField(
