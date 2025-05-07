@@ -376,3 +376,104 @@ span {
 }
 
 /* ============================================================================================== */
+/* ======================================== Service Creation Form =============================== */
+/* Added to match your existing style while providing form-specific enhancements */
+
+.service-form-container {
+  max-width: 600px;
+  margin: 2rem auto;
+  padding: 2rem;
+  background: #646464; /* Matching your content background */
+  border-radius: 25px; /* Matching your content radius */
+  box-shadow: 0px 0px 35px -20px #ec2f00; /* Your signature orange shadow */
+  color: #f9f8fd; /* Light text to contrast dark background */
+}
+
+.service-form {
+  margin: 0 auto;
+  display: grid;
+  width: 100%; /* Full width of container */
+}
+
+/* Form group styling - matches your form spacing */
+.service-form .form-group {
+  margin-bottom: 1.5rem;
+  position: relative;
+}
+
+/* Label styling - making them visible unlike your other forms */
+.service-form label {
+  display: block !important; /* Overriding your form label none */
+  color: #f9f8fd;
+  margin-bottom: 0.5rem;
+  font-weight: 600;
+}
+
+/* Input fields - matching your existing input style */
+.service-form input,
+.service-form textarea,
+.service-form select {
+  width: 100%;
+  padding: 10px 3px;
+  font-size: 20px;
+  background-color: rgba(255,255,255,0.1);
+  border: none;
+  border-bottom: 3px solid #f9f8fd;
+  color: #f9f8fd;
+  transition: 0.5s;
+}
+
+/* Textarea specific styling */
+.service-form textarea {
+  min-height: 120px;
+  resize: vertical;
+}
+
+/* Hover/focus states - matching your orange theme */
+.service-form input:hover,
+.service-form input:focus,
+.service-form textarea:hover,
+.service-form textarea:focus,
+.service-form select:hover,
+.service-form select:focus {
+  border-bottom: 3px solid #ec2f00;
+  background-color: rgba(255,255,255,0.2);
+}
+
+/* Submit button - matching your button style */
+.submit-btn {
+  background-color: transparent;
+  border: 2px solid #ec2f00;
+  border-radius: 5px;
+  padding: 10px;
+  transition: all 0.7s;
+  color: #ec2f00;
+  text-decoration: none;
+  text-transform: uppercase;
+  cursor: pointer;
+  margin-top: 30px;
+  font-size: 1rem;
+}
+
+.submit-btn:hover {
+  background: #ec4138;
+  border: 2px solid #f05749;
+  border-right: 2px solid #e02a21;
+  border-bottom: 2px solid #e02a21;
+  color: #f9f8fd;
+}
+
+/* Error messages - matching your error style */
+.service-form .errorlist {
+  color: #ff4040;
+  text-shadow: 0px 0px 10px #800;
+  list-style: none;
+  padding: 0;
+  margin-top: 5px;
+}
+
+/* Placeholder text - visible on dark background */
+.service-form input::placeholder,
+.service-form textarea::placeholder {
+  color: rgba(249, 248, 253, 0.7);
+}
