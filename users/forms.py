@@ -78,6 +78,7 @@ class CompanySignUpForm(UserCreationForm):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+        self.fields['field'].choices = [('', '--- Select Field ---')] + list(Company.FIELD_CHOICES)
         
         # Set common attributes for all fields
         field_attrs = {
@@ -116,9 +117,11 @@ class CompanySignUpForm(UserCreationForm):
              
                 
                 # Create company profile
+                field_value = self.cleaned_data['field']
                 company = Company(
                     user=user,
-                    field=self.cleaned_data['field']
+                    field=field_value,
+                    is_all_in_one=(field_value == 'All in One')
                  
                 )
                 company.save()
