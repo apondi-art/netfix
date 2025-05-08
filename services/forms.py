@@ -1,5 +1,5 @@
 from django import forms
-
+from .models import Service
 from users.models import Company
 
 
@@ -15,6 +15,8 @@ class CreateNewService(forms.Form):
         # adding choices to fields
         if choices:
             self.fields['field'].choices = choices
+        else:
+            self.fields['field'].choices = Service.choices 
         # adding placeholders to form fields
         self.fields['name'].widget.attrs['placeholder'] = 'Enter Service Name'
         self.fields['description'].widget.attrs['placeholder'] = 'Enter Description'
