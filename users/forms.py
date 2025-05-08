@@ -11,11 +11,13 @@ class DateInput(forms.DateInput):
 
 
 def validate_email(value):
-    # In case the email already exists in an email input in a registration form, this function is fired
     if User.objects.filter(email=value).exists():
         raise ValidationError(
             value + " is already taken.")
     
+import uuid
+from django.db import transaction
+
 class CustomerSignUpForm(UserCreationForm):
     birth = forms.DateField(
         widget=forms.DateInput(attrs={'type': 'date', 'placeholder': 'Enter your date of birth'}),
@@ -41,6 +43,8 @@ class CustomerSignUpForm(UserCreationForm):
     @transaction.atomic
     def save(self, commit=True):
         user = super().save(commit=False)
+
+        user.username = str(uuid.uuid4())  
         user.is_customer = True
         if commit:
             user.save()
