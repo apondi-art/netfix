@@ -1,0 +1,33 @@
+{% extends 'main/base.html' %}
+
+{% block title %}Create Service{% endblock %}
+
+{% block content %}
+<div class="service-form-container">
+    <h2>Create New Service</h2>
+    <form method="post" class="service-form">
+        {% csrf_token %}
+        <div class="form-group">
+            {{ form.name.label_tag }}
+            {{ form.name }}
+            {{ form.name.errors }}
+        </div>
+        <div class="form-group">
+            {{ form.description.label_tag }}
+            {{ form.description }}
+            {{ form.description.errors }}
+        </div>
+        <div class="form-group">
+            {{ form.price_hour.label_tag }}
+            {{ form.price_hour }}
+            {{ form.price_hour.errors }}
+        </div>
+        <div class="form-group">
+            {{ form.field.label_tag }}
+            {{ form.field }}
+            {{ form.field.errors }}
+        </div>
+        <button type="submit" class="submit-btn">Create Service</button>
+    </form>
+</div>
+{% endblock %}
