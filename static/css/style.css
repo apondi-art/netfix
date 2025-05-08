@@ -375,4 +375,35 @@ span {
   margin: 5px 0px;
 }
 
+
+/* =========================================login page===================================================== */
+.register-link a {
+  color: black;
+  text-decoration: underline;
+}
+
+
+.register-link a:hover {
+  color: orangered;
+  text-decoration: underline;
+}
+
+.login-form {
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  width: 100%; 
+}
+.login-heading {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  width: 100%; 
+}
+
+.error-message p {
+  color: #FF5722;
+}
+
 /* ============================================================================================== */
