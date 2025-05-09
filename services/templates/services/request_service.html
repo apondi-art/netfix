@@ -1,12 +1,40 @@
 {% extends 'main/base.html' %}
 {% block title %}
-    Request Service
+    Request Service: {{ service.name }}
 {% endblock %}
 
 {% block content %}
     <p class="title">Service Request Details</p>
+    
+    <div class="service-details">
+        <h2>{{ service.name }}</h2>
+        <p><strong>Category:</strong> {{ service.field }}</p>
+        <p><strong>Provider:</strong> <a href="/company/{{service.company.user}}">{{ service.company.user.username }}</a></p>
+        <p><strong>Rate:</strong> {{ service.price_hour }}€/hour</p>
+        <p><strong>Description:</strong> {{ service.description }}</p>
+    </div>
+    
     <form method="POST">
         {% csrf_token %}
-        <button type="submit">Request</button>
+        <div class="form-group">
+            <label for="{{ form.location.id_for_label }}">Your Address:</label>
+            {{ form.location }}
+        </div>
+        
+        <div class="form-group">
+            <label for="{{ form.hours.id_for_label }}">Hours Needed:</label>
+            {{ form.hours }}
+            <div class="price-estimate">
+                <p>Rate: <strong>{{ service.price_hour }}€/hour</strong></p>
+                <p>Note: Total cost will be calculated based on the hours you select</p>
+            </div>
+        </div>
+        
+        <div class="form-group">
+            <label for="{{ form.additional_notes.id_for_label }}">Additional Notes:</label>
+            {{ form.additional_notes }}
+        </div>
+        
+        <button type="submit" class="request-button">Submit Request</button>
     </form>
 {% endblock %}
