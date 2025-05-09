@@ -1,22 +1,53 @@
-from django.shortcuts import render, redirect,get_object_or_404
-from django.http import HttpResponseRedirect,HttpResponse
+from django.shortcuts import render, redirect
 from django.contrib import messages
 from users.models import Company, Customer, User
-from .models import Service,ServiceRequest
+from .models import Service, ServiceRequest
 from .forms import CreateNewService, RequestServiceForm
 
 
 def service_list(request):
+    """
+    Display a list of all services, ordered by most recent first.
+    
+    Args:
+        request: HttpRequest object
+    
+    Returns:
+        HttpResponse: Rendered template with services queryset
+    """
     services = Service.objects.all().order_by("-date")
     return render(request, 'services/list.html', {'services': services})
 
 
 def index(request, id):
+    """
+    Display detailed view of a single service.
+    
+    Args:
+        request: HttpRequest object
+        id: Primary key of the Service to display
+    
+    Returns:
+        HttpResponse: Rendered template with service details
+    """
     service = Service.objects.get(id=id)
     return render(request, 'services/single_service.html', {'service': service})
 
+
 def create(request):
-    # First check authentication and company status
+    """
+    Handle service creation form for companies.
+    
+    Performs authentication checks and processes form submission.
+    Field choices are dynamically determined based on company type.
+    
+    Args:
+        request: HttpRequest object
+    
+    Returns:
+        HttpResponse: Rendered form or redirect on success
+    """
+    # Authentication and authorization checks
     if not request.user.is_authenticated or not request.user.is_company:
         messages.error(request, "Only companies can create services")
         return redirect('services_list')
@@ -27,15 +58,16 @@ def create(request):
         messages.error(request, "Company profile not found")
         return redirect('services_list')
 
-    # Determine choices based on company type
+    # Determine available service categories based on company type
     if company.is_all_in_one or company.field == 'All in One':
-        choices = Service.choices
+        choices = Service.choices  # All categories available
     else:
-        choices = [(company.field, company.field)]
+        choices = [(company.field, company.field)]  # Only company's specific field
 
     if request.method == 'POST':
         form = CreateNewService(request.POST, choices=choices)
         if form.is_valid():
+            # Create and save new service
             service = Service(
                 company=company,
                 name=form.cleaned_data['name'],
@@ -51,15 +83,39 @@ def create(request):
     
     return render(request, 'services/create.html', {'form': form})
 
+
 def service_field(request, field):
-    # search for the service present in the url
+    """
+    Display services filtered by a specific category/field.
+    
+    Args:
+        request: HttpRequest object
+        field: Service category (URL parameter, hyphens converted to spaces)
+    
+    Returns:
+        HttpResponse: Rendered template with filtered services
+    """
+    # Convert URL-friendly field name to display format
     field = field.replace('-', ' ').title()
-    services = Service.objects.filter(
-        field=field)
+    services = Service.objects.filter(field=field)
     return render(request, 'services/field.html', {'services': services, 'field': field})
 
+
 def request_service(request, id):
-    # Check if user is authenticated and is a customer
+    """
+    Handle service request submission from customers.
+    
+    Performs authentication checks, processes form submission,
+    and calculates total price based on service rate and hours.
+    
+    Args:
+        request: HttpRequest object
+        id: Primary key of the requested Service
+    
+    Returns:
+        HttpResponse: Rendered form or redirect on success
+    """
+    # Authentication and authorization checks
     if not request.user.is_authenticated or not request.user.is_customer:
         messages.error(request, "Only customers can request services")
         return redirect('services_list')
@@ -77,14 +133,15 @@ def request_service(request, id):
     if request.method == 'POST':
         form = RequestServiceForm(request.POST)
         if form.is_valid():
+            # Extract cleaned form data
             hours = form.cleaned_data['hours']
             location = form.cleaned_data['location']
             additional_notes = form.cleaned_data.get('additional_notes', '')
             
-            # Calculate price based on service hourly rate and hours requested
+            # Calculate total price
             price = service.price_hour * hours
             
-            # Create service request
+            # Create and save service request
             service_request = ServiceRequest(
                 customer=customer,
                 service=service,
@@ -95,7 +152,7 @@ def request_service(request, id):
             )
             service_request.save()
             
-            # Display more detailed success message including price
+            # Detailed success message with pricing breakdown
             messages.success(
                 request, 
                 f"Service request for '{service.name}' submitted successfully. "
