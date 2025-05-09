@@ -91,6 +91,6 @@ This project is licensed under the [MIT License](LICENSE).
 
 ## Contributors
 
-[Quinter Ochieng](https://learn.zone01kisumu.ke/git/quochieng)
+[Quinter Ochieng](https://github.com/apondi-art)
 
-[Wycliffe Onyango](https://learn.zone01kisumu.ke/git/wyonyango)
+[Wycliffe Onyango](https://github.com/WycliffeAlphus)
