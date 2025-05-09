@@ -1,8 +1,8 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect,get_object_or_404
 from django.http import HttpResponseRedirect,HttpResponse
 from django.contrib import messages
 from users.models import Company, Customer, User
-from .models import Service
+from .models import Service,ServiceRequest
 from .forms import CreateNewService, RequestServiceForm
 
 
@@ -58,6 +58,55 @@ def service_field(request, field):
         field=field)
     return render(request, 'services/field.html', {'services': services, 'field': field})
 
-
 def request_service(request, id):
-    return render(request, 'services/request_service.html', {})
+    # Check if user is authenticated and is a customer
+    if not request.user.is_authenticated or not request.user.is_customer:
+        messages.error(request, "Only customers can request services")
+        return redirect('services_list')
+    
+    try:
+        service = Service.objects.get(id=id)
+        customer = Customer.objects.get(user=request.user)
+    except Service.DoesNotExist:
+        messages.error(request, "Service not found")
+        return redirect('services_list')
+    except Customer.DoesNotExist:
+        messages.error(request, "Customer profile not found")
+        return redirect('services_list')
+    
+    if request.method == 'POST':
+        form = RequestServiceForm(request.POST)
+        if form.is_valid():
+            hours = form.cleaned_data['hours']
+            location = form.cleaned_data['location']
+            additional_notes = form.cleaned_data.get('additional_notes', '')
+            
+            # Calculate price based on service hourly rate and hours requested
+            price = service.price_hour * hours
+            
+            # Create service request
+            service_request = ServiceRequest(
+                customer=customer,
+                service=service,
+                hours=hours,
+                location=location,
+                price=price,
+                additional_notes=additional_notes,
+            )
+            service_request.save()
+            
+            # Display more detailed success message including price
+            messages.success(
+                request, 
+                f"Service request for '{service.name}' submitted successfully. "
+                f"Total cost: {price}€ ({service.price_hour}€/hour × {hours} hours)"
+            )
+            return redirect('customer_profile', name=request.user.username)
+    else:
+        form = RequestServiceForm()
+    
+    context = {
+        'service': service,
+        'form': form,
+    }
+    return render(request, 'services/request_service.html', context)
