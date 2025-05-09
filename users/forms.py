@@ -2,7 +2,7 @@ from django import forms
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm, authenticate
 from django.db import transaction
 from django.core.exceptions import ValidationError
-
+from datetime import date
 from .models import User, Company, Customer
 
 
@@ -16,6 +16,7 @@ def validate_email(value):
             value + " is already taken.")
 
 
+
 class CustomerSignUpForm(UserCreationForm):
     birth = forms.DateField(
         widget=forms.DateInput(attrs={
@@ -23,7 +24,7 @@ class CustomerSignUpForm(UserCreationForm):
             'placeholder': 'Enter your date of birth'
         }),
         label="Date of Birth",
-        help_text= "Enter your date of birth"
+        help_text="Enter your date of birth"
     )
     username = forms.CharField(
         max_length=150,
@@ -51,6 +52,16 @@ class CustomerSignUpForm(UserCreationForm):
         self.fields['password2'].widget.attrs.update({'placeholder': 'Confirm your password'})
         self.fields['birth'].widget.attrs.update({'autocomplete': 'off'})
 
+    def clean_birth(self):
+        birth = self.cleaned_data.get('birth')
+        today = date.today()
+
+        if birth > today:
+            raise ValidationError("Birth date cannot be in the future.")
+        if (today.year - birth.year) < 18 or (today.year - birth.year == 18 and (today.month, today.day) < (birth.month, birth.day)):
+            raise ValidationError("You must be at least 18 years old to sign up.")
+        return birth
+
     @transaction.atomic
     def save(self, commit=True):
         user = super().save(commit=False)
@@ -63,6 +74,7 @@ class CustomerSignUpForm(UserCreationForm):
                 birth=self.cleaned_data['birth']
             )
         return user
+
 
 class CompanySignUpForm(UserCreationForm):
     email = forms.EmailField(
