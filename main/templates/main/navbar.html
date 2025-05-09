@@ -19,7 +19,11 @@
         </li>
         
         {% if request.user.is_authenticated and request.user.is_active %}
+            {% if  request.user.is_company %}
             <li><a href="/company/{{ request.user.username }}">Profile</a></li>
+            {% else %}
+            <li><a href="/customer/{{ request.user.username }}">Profile</a></li>
+            {% endif %}
             <li class="right-align"><a href="/logout">Logout</a></li>
         {% else %}
             <li class="right-align"><a href="/register">Register</a></li>
