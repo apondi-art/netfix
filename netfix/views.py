@@ -9,7 +9,6 @@ def home(request):
 
 
 def customer_profile(request, name):
-    # Fetch the customer user and all of the service requests
     try:
         user = User.objects.get(username=name)
         if not user.is_customer:
@@ -19,20 +18,19 @@ def customer_profile(request, name):
         customer = Customer.objects.get(user=user)
         service_history = ServiceRequest.objects.filter(customer=customer).order_by("-request_date")
         
-        # Calculate user age (if you have a date_of_birth field in your Customer model)
+        # Calculate user age - use the correct field name ('birth')
         user_age = None
-        if hasattr(customer, 'date_of_birth'):
+        if customer.birth:  # Check if birth date exists
             from datetime import date
             today = date.today()
-            born = customer.date_of_birth
+            born = customer.birth  # Use the correct field name
             user_age = today.year - born.year - ((today.month, today.day) < (born.month, born.day))
         
         context = {
             'user': user,
             'user_age': user_age,
-            'sh': service_history,  # Using 'sh' to match your template
+            'sh': service_history,
         }
-        
         return render(request, 'users/profile.html', context)
         
     except User.DoesNotExist:
@@ -41,7 +39,6 @@ def customer_profile(request, name):
     except Customer.DoesNotExist:
         messages.error(request, "Customer profile not found")
         return redirect('home')
-
 
 def company_profile(request, name):
     # fetches the company user and all of the services available by it

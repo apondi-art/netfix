@@ -14,19 +14,30 @@ def validate_email(value):
     if User.objects.filter(email=value).exists():
         raise ValidationError(
             value + " is already taken.")
-    
-import uuid
-from django.db import transaction
+
 
 class CustomerSignUpForm(UserCreationForm):
     birth = forms.DateField(
-        widget=forms.DateInput(attrs={'type': 'date', 'placeholder': 'Enter your date of birth'}),
-        label="Date of Birth"
+        widget=forms.DateInput(attrs={
+            'type': 'date', 
+            'placeholder': 'Enter your date of birth'
+        }),
+        label="Date of Birth",
+        help_text= "Enter your date of birth"
+    )
+    username = forms.CharField(
+        max_length=150,
+        widget=forms.TextInput(attrs={
+            'placeholder': 'Choose a username',
+            'autocomplete': 'username'
+        }),
+        label="Username",
+        help_text="Required. 150 characters or fewer. Letters, digits and @/./+/-/_ only."
     )
 
     class Meta(UserCreationForm.Meta):
         model = User
-        fields = ('email', 'password1', 'password2', 'birth')
+        fields = ('username', 'email', 'password1', 'password2', 'birth')
         labels = {
             'email': 'Email Address',
             'password1': 'Password',
@@ -34,7 +45,7 @@ class CustomerSignUpForm(UserCreationForm):
         }
 
     def __init__(self, *args, **kwargs):
-        super(CustomerSignUpForm, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
         self.fields['email'].widget.attrs.update({'placeholder': 'Enter your email'})
         self.fields['password1'].widget.attrs.update({'placeholder': 'Enter a password'})
         self.fields['password2'].widget.attrs.update({'placeholder': 'Confirm your password'})
@@ -43,14 +54,15 @@ class CustomerSignUpForm(UserCreationForm):
     @transaction.atomic
     def save(self, commit=True):
         user = super().save(commit=False)
-
-        user.username = str(uuid.uuid4())  
         user.is_customer = True
+        
         if commit:
             user.save()
-            Customer.objects.create(user=user, birth=self.cleaned_data['birth'])
+            Customer.objects.create(
+                user=user, 
+                birth=self.cleaned_data['birth']
+            )
         return user
-
 
 class CompanySignUpForm(UserCreationForm):
     email = forms.EmailField(
