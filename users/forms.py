@@ -22,7 +22,8 @@ class CustomerSignUpForm(UserCreationForm):
             'type': 'date', 
             'placeholder': 'Enter your date of birth'
         }),
-        label="Date of Birth"
+        label="Date of Birth",
+        help_text= "Enter your date of birth"
     )
     username = forms.CharField(
         max_length=150,
