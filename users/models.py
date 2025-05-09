@@ -58,8 +58,8 @@ class Company(models.Model):
 
     def __str__(self):
           if self.is_all_in_one  or self.field == 'All in One':
-            return f"{self.user.username} (All in One)"
-          return f"{self.user.username} ({self.field})"
+            return f"{self.user.username}" 
+          return f"{self.user.username}"
 
 
    
