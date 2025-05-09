@@ -6,6 +6,15 @@
 {% block content %}
     <form method="POST">
         {% csrf_token %}
+        {% if form.errors %}
+        <div class="error_message">
+            {% for field, errors in form.errors.items %}
+                {% for error in errors %}
+                    <p> {{ error }}</p>
+                {% endfor %}
+            {% endfor %}
+        </div>
+    {% endif %}
         {{form}}
         <button type="submit" name="register">Register</button>
     </form>
