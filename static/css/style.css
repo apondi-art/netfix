@@ -385,9 +385,7 @@ textarea:focus {
 }
 
 span {
-  background-color: #3834343d;
   border-radius: 30px;
-  box-shadow: 0px 0px 23px 1px #2423213d;
   padding: 5px 10px;
   margin: 5px 0px;
 }
