@@ -1,33 +1,36 @@
 <nav class="navbar">
     <ul>
-        <li><a href="/">Home</a></li>
-        <li>
-            <a href="/services/">Services</a>
-            <ul>
-                <li><a href="/services/air-conditioner">Air Conditioner</a></li>
-                <li><a href="/services/carpentry">Carpentry</a></li>
-                <li><a href="/services/electricity">Electricity</a></li>
-                <li><a href="/services/gardening">Gardening</a></li>
-                <li><a href="/services/home-machines">Home Machines</a></li>
-                <li><a href="/services/house-keeping">House Keeping</a></li>
-                <li><a href="/services/interior-design">Interior Design</a></li>
-                <li><a href="/services/locks">Locks</a></li>
-                <li><a href="/services/painting">Painting</a></li>
-                <li><a href="/services/plumbing">Plumbing</a></li>
-                <li><a href="/services/water-heaters">Water Heaters</a></li>
-            </ul>
-        </li>
-        
+      <li><a href="/">Home</a></li>
+      <li>
+        <a href="/services/">Services</a>
+        <ul>
+          <li><a href="/services/air-conditioner">Air Conditioner</a></li>
+          <li><a href="/services/carpentry">Carpentry</a></li>
+          <li><a href="/services/electricity">Electricity</a></li>
+          <li><a href="/services/gardening">Gardening</a></li>
+          <li><a href="/services/home-machines">Home Machines</a></li>
+          <li><a href="/services/house-keeping">House Keeping</a></li>
+          <li><a href="/services/interior-design">Interior Design</a></li>
+          <li><a href="/services/locks">Locks</a></li>
+          <li><a href="/services/painting">Painting</a></li>
+          <li><a href="/services/plumbing">Plumbing</a></li>
+          <li><a href="/services/water-heaters">Water Heaters</a></li>
+        </ul>
+      </li>
+      <div class="navbar-right">
         {% if request.user.is_authenticated and request.user.is_active %}
-            {% if  request.user.is_company %}
+          {% if request.user.is_company %}
             <li><a href="/company/{{ request.user.username }}">Profile</a></li>
-            {% else %}
+          {% else %}
             <li><a href="/customer/{{ request.user.username }}">Profile</a></li>
-            {% endif %}
-            <li class="right-align"><a href="/logout">Logout</a></li>
+          {% endif %}
+          <li><a href="/logout">Logout</a></li>
         {% else %}
-            <li class="right-align"><a href="/register">Register</a></li>
-            <li class="right-align"><a href="/login">Login</a></li>
+          <li><a href="/register">Register</a></li>
+          <li><a href="/login">Login</a></li>
         {% endif %}
+      </div>
     </ul>
-</nav>
+  </nav>
+  
+  

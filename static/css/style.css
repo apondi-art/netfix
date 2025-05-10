@@ -96,86 +96,103 @@ button:hover {
 /* ============================================================================================== */
 
 /* ======================================== Navbar ============================================== */
-
-.navbar {
-  position: sticky;
-  top: 15px;
-  box-shadow: inset 1px -1px 10px rgb(116, 116, 116);
-  border: 2px solid white;
-  border-radius: 30px;
-  animation: slide-in 1s ease-out;
-  background-color: #e7e7e7;
-  width: 95%;
-  margin: 0 auto;
-  margin-bottom: 30px;
-}
-
-.navbar ul {
-  position: relative;
-  display: flex;
-  flex: 1 1 auto;
-  margin: 0;
-  padding: 0 30px;
-  list-style-type: none;
-}
-.navbar ul li:not(:last-child) {
-  margin-right: 40px;
-}
-.navbar ul li {
-  border: 2px solid transparent;
-  border-radius: 5px;
-  padding: 10px;
-  transition: background 0.2s;
-}
-.navbar ul li a {
-  color: #ec2f00;
-  text-decoration: none;
-  text-transform: uppercase;
-  transition: color 0.2s;
-}
-.navbar ul li ul {
-  visibility: hidden;
-  opacity: 0;
-  position: absolute;
-  display: block;
-  margin: 12px -12px;
-  padding: 0;
-  background: #ffa91b;
-  border: 2px solid #f7c833;
-  border-right: 2px solid #f89329;
-  border-bottom: 2px solid #f89329;
-  border-radius: 5px;
-  transition: opacity 0.2s, visibility 0.2s;
-}
-.navbar ul li ul li {
-  margin: -2px 0 0 -2px;
-  width: calc(100% - 20px);
-  line-height: 1.7;
-}
-
-.navbar ul li:hover {
-  background: #ec4138;
-  border: 2px solid #f05749;
-  border-right: 2px solid #e02a21;
-  border-bottom: 2px solid #e02a21;
-}
-.navbar ul li:hover a {
-  color: #f9f8fd;
-}
-.navbar ul li:hover ul {
-  visibility: visible;
-  opacity: 1;
-  box-shadow: 0px 3px 5px 2px #ebecf1;
-}
-.navbar ul li:hover ul li a {
-  color: #f9f8fd;
-}
-
-.last_navbar {
-  right: 0;
-  position: absolute;
-  margin-right: 20px;
-}
+  .navbar {
+    position: sticky;
+    top: 15px;
+    box-shadow: inset 1px -1px 10px rgb(116, 116, 116);
+    border: 2px solid white;
+    border-radius: 30px;
+    animation: slide-in 1s ease-out;
+    background-color: #e7e7e7;
+    width: 95%;
+    margin: 0 auto;
+    margin-bottom: 30px;
+  }
+  
+  .navbar ul {
+    position: relative;
+    display: flex;
+    flex: 1 1 auto;
+    margin: 0;
+    padding: 0 30px;
+    list-style-type: none;
+  }
+  
+  .navbar ul li:not(:last-child) {
+    margin-right: 40px;
+  }
+  
+  .navbar ul li {
+    border: 2px solid transparent;
+    border-radius: 5px;
+    padding: 10px;
+    transition: background 0.2s;
+  }
+  
+  .navbar ul li a {
+    color: #ec2f00;
+    text-decoration: none;
+    text-transform: uppercase;
+    transition: color 0.2s;
+  }
+  
+  /* Dropdown menu styling */
+  .navbar ul li ul {
+    visibility: hidden;
+    opacity: 0;
+    position: absolute;
+    display: block;
+    margin: 12px -12px;
+    padding: 0;
+    background: #ffa91b;
+    border: 2px solid #f7c833;
+    border-right: 2px solid #f89329;
+    border-bottom: 2px solid #f89329;
+    border-radius: 5px;
+    transition: opacity 0.2s, visibility 0.2s;
+  }
+  
+  .navbar ul li ul li {
+    margin: -2px 0 0 -2px;
+    width: calc(100% - 20px);
+    line-height: 1.7;
+  }
+  
+  /* Hover effects */
+  .navbar ul li:hover {
+    background: #ec4138;
+    border: 2px solid #f05749;
+    border-right: 2px solid #e02a21;
+    border-bottom: 2px solid #e02a21;
+  }
+  
+  .navbar ul li:hover a {
+    color: #f9f8fd;
+  }
+  
+  .navbar ul li:hover ul {
+    visibility: visible;
+    opacity: 1;
+    box-shadow: 0px 3px 5px 2px #ebecf1;
+  }
+  
+  .navbar ul li:hover ul li a {
+    color: #f9f8fd;
+  }
+  
+  /* Right-aligned navbar items */
+  .navbar-right {
+    margin-left: auto;
+    display: flex;
+  }
+  
+  .navbar-right li {
+    margin-right: 0;
+  }
+  
+  .navbar-right li:not(:last-child) {
+    margin-right: 40px;
+  }
 
 /* ============================================================================================== */
 
