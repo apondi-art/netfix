@@ -2,14 +2,14 @@
 {% block title %}Company Registration{% endblock %}
 
 {% block content %}
-<div class="content">
-    <h1 class="title">Company Registration</h1>
+<div style="display: flex; flex-direction: column; align-items: center;">
+    <h1 style="text-align: center;">Company Registration</h1>
     
-    <form method="POST" novalidate>
+    <form method="POST" novalidate style="width: 100%; max-width: 500px;">
         {% csrf_token %}
         
         {% if form.errors %}
-            <div class="error_message">
+            <div style="text-align: center;">
                 {% for field, errors in form.errors.items %}
                     {% for error in errors %}
                         <p>{{ field|title }}: {{ error }}</p>
@@ -18,46 +18,47 @@
             </div>
         {% endif %}
         
-        <div class="choice" style="flex-direction: column; gap: 20px;">
-            <div>
-                <span>{{ form.username.label_tag }}</span>
+        <div style="display: flex; flex-direction: column; align-items: center; gap: 20px;">
+            <div style="display: flex; flex-direction: column; align-items: center; width: 100%;">
+                {{ form.username.label_tag }}
                 {{ form.username }}
                 {% if form.username.help_text %}
-                    <small class="form-text text-muted">{{ form.username.help_text }}</small>
+                    <small style="text-align: center;">{{ form.username.help_text }}</small>
                 {% endif %}
             </div>
             
-            <div>
-                <span>{{ form.email.label_tag }}</span>
+            <div style="display: flex; flex-direction: column; align-items: center; width: 100%;">
+                {{ form.email.label_tag }}
                 {{ form.email }}
                 {% if form.email.help_text %}
-                    <small class="form-text text-muted">{{ form.email.help_text }}</small>
+                    <small style="text-align: center;">{{ form.email.help_text }}</small>
                 {% endif %}
             </div>
             
-            <div>
-                <span>{{ form.password1.label_tag }}</span>
+            <div style="display: flex; flex-direction: column; align-items: center; width: 100%;">
+                {{ form.password1.label_tag }}
                 {{ form.password1 }}
             </div>
             
-            <div>
-                <span>{{ form.password2.label_tag }}</span>
+            <div style="display: flex; flex-direction: column; align-items: center; width: 100%;">
+                {{ form.password2.label_tag }}
                 {{ form.password2 }}
             </div>
             
-            <div>
-                <span>{{ form.field.label_tag }}</span>
+            <div style="display: flex; flex-direction: column; align-items: center; width: 100%;">
+                {{ form.field.label_tag }}
                 {{ form.field }}
                 {% if form.field.help_text %}
-                    <small class="form-text text-muted">{{ form.field.help_text }}</small>
+                    <small style="text-align: center;">{{ form.field.help_text }}</small>
                 {% endif %}
             </div>
         </div>
         
-        <button type="submit" class="like_button" style="margin-top: 30px;">
-            Register Company
-        </button>
+        <div style="display: flex; justify-content: center; margin-top: 20px;">
+            <button type="submit">
+                Register Company
+            </button>
+        </div>
     </form>
 </div>
 {% endblock %}
-
